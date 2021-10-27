@@ -36,23 +36,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final CarouselController _controller = CarouselController();
-  List _recipes_dessert = [];
 
-  @override
-  void initState() {
-    super.initState();
-    readJson();
-  }
-
-  Future<void> readJson() async {
-    final String response =
-        await rootBundle.loadString('assets/json/dessert.json');
-    final data = await json.decode(response);
-    setState(() {
-      _recipes_dessert = data["recipes"];
-      print(_recipes_dessert);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,170 +57,11 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             CarouselSlider(
               items: [
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      height: 200,
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage("images/dessert2.jpeg"),
-                              fit: BoxFit.fitWidth)),
-                      child: Center(
-                          child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              IconButton(
-                                  onPressed: () => _controller.previousPage(),
-                                  icon: const Icon(
-                                    Icons.arrow_left,
-                                    color: Colors.white,
-                                  )),
-                              const Text(
-                                'Dessert',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 24),
-                              ),
-                              IconButton(
-                                  onPressed: () => _controller.nextPage(),
-                                  icon: const Icon(Icons.arrow_right,
-                                      color: Colors.white)),
-                            ],
-                          ),
-                        ],
-                      )),
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                    Container(
-                      child: Expanded(
-                          child: MediaQuery.removePadding(context: context, removeTop: true ,
-                              child:ListView(
-                                children: [
-                                  GridView.builder(
-                                    gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount:
-                                        MediaQuery.of(context).size.width ~/
-                                            200),
-                                    itemBuilder: (context, index) {
-                                      return RecipeCard(
-                                          id: _recipes_dessert[index]["id"],
-                                          title: _recipes_dessert[index]["name"],
-                                          picPath: _recipes_dessert[index]["picture"],
-                                          recipe: _recipes_dessert[index]["recipe"],
-                                      );
-                                    },
-                                    itemCount: _recipes_dessert.length,
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    physics: const ScrollPhysics(),
-                                    primary: false,
-                                  )
-                                ],
-                              )
-                          )
+                CarouselPage(controller: _controller, file: 'assets/json/dessert.json', image: "images/dessert2.jpeg", titre: "Dessert",),
+                CarouselPage(controller: _controller, file: 'assets/json/dessert.json', image: "images/entre.jpg", titre: "Entrée",),
+                CarouselPage(controller: _controller, file: 'assets/json/dessert.json', image: "images/plat.jpg", titre: "Plat principal",),
 
 
-    ),
-                    )
-                  ],
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      height: 200,
-                      color: Colors.blue,
-                      child: Center(
-                          child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              IconButton(
-                                  onPressed: () => _controller.previousPage(),
-                                  icon: const Icon(
-                                    Icons.arrow_left,
-                                    color: Colors.white,
-                                  )),
-                              const Text('Entry C'),
-                              IconButton(
-                                  onPressed: () => _controller.nextPage(),
-                                  icon: const Icon(Icons.arrow_right,
-                                      color: Colors.white)),
-                            ],
-                          ),
-                        ],
-                      )),
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                    GridView.count(
-                      crossAxisCount: 10,
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text("He'd have you all unravel at the"),
-                          color: Colors.teal[100],
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      height: 200,
-                      color: Colors.green,
-                      child: Center(
-                          child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              IconButton(
-                                  onPressed: () => _controller.previousPage(),
-                                  icon: const Icon(
-                                    Icons.arrow_left,
-                                    color: Colors.white,
-                                  )),
-                              const Text('Entry C'),
-                              IconButton(
-                                  onPressed: () => _controller.nextPage(),
-                                  icon: const Icon(Icons.arrow_right,
-                                      color: Colors.white)),
-                            ],
-                          ),
-                        ],
-                      )),
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                    GridView.count(
-                      crossAxisCount: 10,
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text("He'd have you all unravel at the"),
-                          color: Colors.teal[100],
-                        )
-                      ],
-                    )
-                  ],
-                ),
               ],
               options: CarouselOptions(
                   autoPlay: false,
@@ -310,4 +135,118 @@ class RecipeCard extends StatelessWidget {
   }
 
 
+}
+
+
+class CarouselPage extends StatefulWidget {
+  const CarouselPage({Key? key, required this.controller, required this.file, required this.image, required this.titre}) : super(key: key);
+
+  final CarouselController controller;
+  final String file;
+  final String image;
+  final String titre;
+
+  @override
+  _CarouselPageState createState() => _CarouselPageState();
+}
+
+class _CarouselPageState extends State<CarouselPage> {
+
+  List _recipes_dessert = [];
+
+  @override
+  void initState() {
+    super.initState();
+    readJson();
+  }
+
+  Future<void> readJson() async {
+    final String response =
+    await rootBundle.loadString(widget.file);
+    final data = await json.decode(response);
+    setState(() {
+      _recipes_dessert = data["recipes"];
+
+    });
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Container(
+          height: 200,
+          decoration:  BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage(widget.image),
+                  fit: BoxFit.fitWidth)),
+          child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      IconButton(
+                          onPressed: () => widget.controller.previousPage(),
+                          icon: const Icon(
+                            Icons.arrow_left,
+                            color: Colors.white,
+                          )),
+                      Text(
+                        widget.titre,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24),
+                      ),
+                      IconButton(
+                          onPressed: () => widget.controller.nextPage(),
+                          icon: const Icon(Icons.arrow_right,
+                              color: Colors.white)),
+                    ],
+                  ),
+                ],
+              )),
+          width: MediaQuery.of(context).size.width,
+        ),
+        Container(
+          child: Expanded(
+              child: MediaQuery.removePadding(context: context, removeTop: true ,
+                  child:ListView(
+                    children: [
+                      GridView.builder(
+                        gridDelegate:
+                        SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount:
+                            MediaQuery.of(context).size.width ~/
+                                200),
+                        itemBuilder: (context, index) {
+                          return RecipeCard(
+                            id: _recipes_dessert[index]["id"],
+                            title: _recipes_dessert[index]["name"],
+                            picPath: _recipes_dessert[index]["picture"],
+                            recipe: _recipes_dessert[index]["recipe"],
+                          );
+                        },
+                        itemCount: _recipes_dessert.length,
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        physics: const ScrollPhysics(),
+                        primary: false,
+                      )
+                    ],
+                  )
+              )
+
+
+          ),
+        )
+      ],
+    );
+  }
 }
